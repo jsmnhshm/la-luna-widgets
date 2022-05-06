@@ -8,7 +8,7 @@
       rel="stylesheet"
     />
 
-    <title>Öffnungszeiten La Luna</title>
+     <!--  Adaptions needed for mobile devices -->
     <style>
       body {
         text-align: center;
@@ -41,7 +41,7 @@
     </style>
   </head>
 
-  <body onload="showOpeningTimes()">
+  <body>
     <div id="counter">
       <h2 id="text"></h2>
       
@@ -51,85 +51,206 @@
       <h3 class="box" id="second"></h3>
     </div>
 
-    <script>
-      function showOpeningTimes() {
-        // Im Sommer, trag "const summerMode = true;" ein!
-        // Im Winter, trag "const summerMode = false;" ein!
+     <!-- BEGIN SCRIPT -->
+     <script>
+      window.onload = function() {
+        //-----------------------------------------------------------------
+        //                    START JASMIN KONFIGURATION
+        //-----------------------------------------------------------------
+        // Text vor den öffnungszeiten (wenn La Luna geöffnet):
+        const weAreOpenText = "Heute geöffnet:";
+        // Text wenn La Luna geschlossen hat:
+        const weAreClosedText = "Heute haben wir leider geschlossen!";
 
-        const summerMode = false;
-        // summer opening times!
-        const summer_monday_friday_start1 = "11:00";
-        const summer_monday_friday_end1 = "14:00";
-        const summer_monday_friday_start2 = "17:00";
-        const summer_monday_friday_end2 = "21:00";
+        // START KONFIGURATION FUER MONTAG
+        const openOnMonday = false;
+        // erste Zeitspanne (z.B. bis Mittag), oder wenn "...start2" und "...end2" leer sind
+        // dann sind das die öffnungszeiten für den ganzen Tag!
+        const mondayStart1 = "";
+        const mondayEnd1 = "";
+        // nach Mittagspause bzw. zweite Zeitspanne zu der offen ist!
+        const mondayStart2 = "";
+        const mondayEnd2 = "";
+        // ENDE KONFIGURATION FUER MONTAG
 
-        const summer_saturday_sunday_start = "11:00";
-        const summer_saturday_sunday_end = "21:00";
+        // START KONFIGURATION FUER DIENSTAG
+        const openOnTuesday = true;
+        // erste Zeitspanne (z.B. bis Mittag), oder wenn "...start2" und "...end2" leer sind
+        // dann sind das die öffnungszeiten für den ganzen Tag!
+        const tuesdayStart1 = "11:00";
+        const tuesdayEnd1 = "14:00";
+        // nach Mittagspause bzw. zweite Zeitspanne zu der offen ist!
+        const tuesdayStart2 = "17:30";
+        const tuesdayEnd2 = "21:00";
+        // ENDE KONFIGURATION FUER DIENSTAG
 
-        // winter opening times!
-        const winter_tuesday_friday_start1 = "11:00";
-        const winter_tuesday_friday_end1 = "14:00";
-        const winter_tuesday_friday_start2 = "17:00";
-        const winter_tuesday_friday_end2 = "21:00";
+        // START KONFIGURATION FUER MITTWOCH
+        const openOnWednesday = true;
+        // erste Zeitspanne (z.B. bis Mittag), oder wenn "...start2" und "...end2" leer sind
+        // dann sind das die öffnungszeiten für den ganzen Tag!
+        const wednesdayStart1 = "11:00";
+        const wednesdayEnd1 = "14:00";
+        // nach Mittagspause bzw. zweite Zeitspanne zu der offen ist!
+        const wednesdayStart2 = "17:30";
+        const wednesdayEnd2 = "21:00";
+        // ENDE KONFIGURATION FUER MITTWOCH
 
-        const winter_saturday_sunday_start = "11:00";
-        const winter_saturday_sunday_end = "21:00";
+        // START KONFIGURATION FUER DONNERSTAG
+        const openOnThursday = true;
+        // erste Zeitspanne (z.B. bis Mittag), oder wenn "...start2" und "...end2" leer sind
+        // dann sind das die öffnungszeiten für den ganzen Tag!
+        const thursdayStart1 = "11:00";
+        const thursdayEnd1 = "14:00";
+        // nach Mittagspause bzw. zweite Zeitspanne zu der offen ist!
+        const thursdayStart2 = "17:30";
+        const thursdayEnd2 = "21:00";
+        // ENDE KONFIGURATION FUER DONNERSTAG
 
+        // START KONFIGURATION FUER FREITAG
+        const openOnFriday = true;
+        // erste Zeitspanne (z.B. bis Mittag), oder wenn "...start2" und "...end2" leer sind
+        // dann sind das die öffnungszeiten für den ganzen Tag!
+        const fridayStart1 = "11:00";
+        const fridayEnd1 = "14:00";
+        // nach Mittagspause bzw. zweite Zeitspanne zu der offen ist!
+        const fridayStart2 = "17:30";
+        const fridayEnd2 = "22:00";
+        // ENDE KONFIGURATION FUER FREITAG
+
+        // START KONFIGURATION FUER SAMSTAG
+        const openOnSaturday = true;
+        // erste Zeitspanne (z.B. bis Mittag), oder wenn "...start2" und "...end2" leer sind
+        // dann sind das die öffnungszeiten für den ganzen Tag!
+        const saturdayStart1 = "11:00";
+        const saturdayEnd1 = "22:00";
+        // nach Mittagspause bzw. zweite Zeitspanne zu der offen ist!
+        const saturdayStart2 = "";
+        const saturdayEnd2 = "";
+        // ENDE KONFIGURATION FUER SAMSTAG
+
+        // START KONFIGURATION FUER SONNTAG
+        const openOnSunday = true;
+        // erste Zeitspanne (z.B. bis Mittag), oder wenn "...start2" und "...end2" leer sind
+        // dann sind das die öffnungszeiten für den ganzen Tag!
+        const sundayStart1 = "11:00";
+        const sundayEnd1 = "21:00";
+        // nach Mittagspause bzw. zweite Zeitspanne zu der offen ist!
+        const sundayStart2 = "";
+        const sundayEnd2 = "";
+        // ENDE KONFIGURATION FUER SONNTAG
+
+        //-----------------------------------------------------------------
+        //                    ENDE JASMIN KONFIGURATION
+        //-----------------------------------------------------------------
+
+        // PRESET IMPORTANT VARIABLES FOR LATER!
         let now = new Date();
         let currentDay = now.getDay();
         const connect = "-";
-        let text = "";
-        let first = "";
-        let second = "";
+        let firstTimeSlot = "";
+        let secondTimeSlot = "";
+
+        // START WEEK-DAY SWITCH
         switch (currentDay) {
+          // BEGIN MONDAY
           case 1:
-            if (summerMode) {
-              text = "Heute geöffnet:";
-              first =
-                summer_monday_friday_start1 +
-                connect +
-                summer_monday_friday_end1;
-              second =
-                summer_monday_friday_start2 +
-                connect +
-                summer_monday_friday_end2;
-            } else {
-              first = "Heute haben wir leider geschlossen!";
+            if (openOnMonday) {
+              firstTimeSlot = mondayStart1 + connect + mondayEnd1;
+              if (mondayStart2 != "" && mondayEnd2 != "") {
+                secondTimeSlot = mondayStart2 + connect + mondayEnd2;
+              }
             }
             break;
-
+          // END MONDAY
+          // BEGIN TUESDAY
           case 2:
+            if (openOnTuesday) {
+              firstTimeSlot = tuesdayStart1 + connect + tuesdayEnd1;
+              if (tuesdayStart2 != "" && tuesdayEnd2 != "") {
+                secondTimeSlot = tuesdayStart2 + connect + tuesdayEnd2;
+              }
+            }
+            break;
+          // END TUESDAY
+          // BEGIN WEDNESDAY
           case 3:
+            if (openOnWednesday) {
+              firstTimeSlot = wednesdayStart1 + connect + wednesdayEnd1;
+              if (wednesdayStart2 != "" && wednesdayEnd2 != "") {
+                secondTimeSlot = wednesdayStart2 + connect + wednesdayEnd2;
+              }
+            }
+            break;
+          // END WEDNESDAY
+          // BEGIN THURSDAY
           case 4:
+            if (openOnThursday) {
+              firstTimeSlot = thursdayStart1 + connect + thursdayEnd1;
+              if (thursdayStart2 != "" && thursdayEnd2 != "") {
+                secondTimeSlot = thursdayStart2 + connect + thursdayEnd2;
+              }
+            }
+            break;
+          // END THURSDAY
+          // BEGIN FRIDAY
           case 5:
-            text = "Heute geöffnet:";
-            first =
-              summer_monday_friday_start1 + connect + summer_monday_friday_end1;
-            second =
-              summer_monday_friday_start2 + connect + summer_monday_friday_end2;
+            if (openOnFriday) {
+              firstTimeSlot = fridayStart1 + connect + fridayEnd1;
+              if (fridayStart2 != "" && fridayEnd2 != "") {
+                secondTimeSlot = fridayStart2 + connect + fridayEnd2;
+              }
+            }
             break;
+          // END FRIDAY
+          // BEGIN SATURDAY
           case 6:
-          case 0:
-            text = "Heute geöffnet:";
-            first =
-              summer_saturday_sunday_start +
-              connect +
-              summer_saturday_sunday_end;
+            if (openOnSaturday) {
+              firstTimeSlot = saturdayStart1 + connect + saturdayEnd1;
+              if (saturdayStart2 != "" && saturdayEnd2 != "") {
+                secondTimeSlot = saturdayStart2 + connect + saturdayEnd2;
+              }
+            }
             break;
+          // END SATURDAY
+          // BEGIN SUNDAY
+          case 0:
+            if (openOnSunday) {
+              firstTimeSlot = sundayStart1 + connect + sundayEnd1;
+              if (sundayStart2 != "" && sundayEnd2 != "") {
+                secondTimeSlot = sundayStart2 + connect + sundayEnd2;
+              }
+            }
+            break;
+          // END SUNDAY
+          // BEGIN DEFAULT
           default:
             break;
+          // END DEFAULT
         }
-        let text_element = document.getElementById("text");
-        let first_element = document.getElementById("first");
-        let second_element = document.getElementById("second");
-        text_element.innerHTML = text;
-        first_element.innerHTML = first;
-        if (second == "") {
-          second_element.style = "display: none;";
+
+        // GET ELEMENTS
+        let textElement = document.getElementById("text");
+        let firstTimeSlotElement = document.getElementById("first");
+        let secondTimeSlotElement = document.getElementById("second");
+
+        // CHECK IF THE RESTAURANT IS CLOSED, IF YES: REMOVE THE 'WEAREOPENTEXT'!
+        if (firstTimeSlot === "") {
+          firstTimeSlotElement.innerHTML = weAreClosedText;
+          textElement.style.display = "none";
         } else {
-          second_element.innerHTML = second;
+          textElement.innerHTML = weAreOpenText;
         }
-      }
+        // CHECK IF THERE ARE TWO OPENING SLOTS, OTHERWISE REMOVE SECOND ELEMENT!
+        if (secondTimeSlot == "") {
+          secondTimeSlotElement.style.display = "none";
+        } else {
+          secondTimeSlotElement.innerHTML = secondTimeSlot;
+        }
+        // IN THIS LOGIC, THE 'FIRST' ELEMENT ALWAYS HAS CONTENT IN IT.
+        firstTimeSlotElement.innerHTML = firstTimeSlot;
+      };
     </script>
+    <!-- END SCRIPT -->
   </body>
 </html>
+

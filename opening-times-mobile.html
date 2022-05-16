@@ -235,7 +235,7 @@
 
         // CHECK IF THE RESTAURANT IS CLOSED, IF YES: REMOVE THE 'WEAREOPENTEXT'!
         if (firstTimeSlot === "") {
-          firstTimeSlotElement.innerHTML = weAreClosedText;
+          firstTimeSlot = weAreClosedText;
           textElement.style.display = "none";
         } else {
           textElement.innerHTML = weAreOpenText;
